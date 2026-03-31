@@ -1,59 +1,319 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 PHP Laravel 12 Scrubber Service
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project demonstrates how to implement a **Service Layer Architecture in Laravel 12** to process and sanitize user input.
 
-## About Laravel
+The application allows users to:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* Clean HTML content by removing tags
+* Mask email addresses for privacy
+* Store both original and cleaned data in the database
+* Process multiple lines of input at once
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The project follows a **clean architecture approach** where the business logic is handled inside a **Service Class**.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# ✨ Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+* ✅ HTML Content Scrubbing
+* ✅ Email Masking for Privacy
+* ✅ Service Layer Implementation
+* ✅ Data Processing in Bulk
+* ✅ Laravel MVC Architecture
+* ✅ Database Storage for Audit History
+* ✅ Simple UI using Blade
+* ✅ Laravel 12 Compatible
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+# 🛠 Tech Stack
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Technology   | Description           |
+| ------------ | --------------------- |
+| Framework    | Laravel 12            |
+| Language     | PHP 8.2+              |
+| Database     | MySQL / SQLite        |
+| Frontend     | Blade                 |
+| Architecture | Service Layer Pattern |
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 📦 Installation Guide
 
-## Contributing
+Follow these steps to set up the project locally.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+# 1️⃣ Create Laravel Project
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Run the following command in your terminal:
 
-## Security Vulnerabilities
+```bash
+composer create-project laravel/laravel PHP_Laravel12_Scrubber
+cd PHP_Laravel12_Scrubber
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+# 2️⃣ Generate Required Files
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Run the following Artisan commands:
+
+```bash
+php artisan make:model ScrubbedData -m
+php artisan make:controller ScrubberController
+```
+
+Create the **Services directory**:
+
+```bash
+mkdir app/Services
+```
+
+Create the service file:
+
+```bash
+touch app/Services/ScrubberService.php
+```
+
+---
+
+# 3️⃣ Configure Database
+
+Open the `.env` file and update your database settings:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_scrubber
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+# 4️⃣ Run Database Migration
+
+```bash
+php artisan migrate
+```
+
+This will create the **scrubbed_data table**.
+
+---
+
+# 📂 Project Structure
+
+```
+app
+ ├── Models
+ │    └── ScrubbedData.php
+ │
+ ├── Services
+ │    └── ScrubberService.php
+ │
+ ├── Http
+ │    └── Controllers
+ │         └── ScrubberController.php
+
+database
+ └── migrations
+      └── create_scrubbed_data_table.php
+
+resources
+ └── views
+      └── scrubber
+           └── index.blade.php
+
+routes
+ └── web.php
+```
+
+---
+
+# 🧠 Core Components
+
+## 1️⃣ Migration
+
+File:
+
+```
+database/migrations/create_scrubbed_data_table.php
+```
+
+Creates the table used to store original and cleaned content.
+
+```php
+Schema::create('scrubbed_data', function (Blueprint $table) {
+    $table->id();
+    $table->text('original_content');
+    $table->text('cleaned_content');
+    $table->string('type');
+    $table->timestamps();
+});
+```
+
+---
+
+# 2️⃣ Model
+
+File:
+
+```
+app/Models/ScrubbedData.php
+```
+
+```php
+class ScrubbedData extends Model
+{
+    protected $table = 'scrubbed_data';
+
+    protected $fillable = [
+        'original_content',
+        'cleaned_content',
+        'type'
+    ];
+}
+```
+
+This model allows **mass assignment** for saving processed records.
+
+---
+
+# 3️⃣ Service Layer
+
+File:
+
+```
+app/Services/ScrubberService.php
+```
+
+The service handles all **data cleaning logic**.
+
+```php
+class ScrubberService
+{
+    public function cleanHtml($data)
+    {
+        return strip_tags($data);
+    }
+
+    public function maskEmail($email)
+    {
+        return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
+    }
+}
+```
+
+### Functions
+
+| Function    | Purpose                |
+| ----------- | ---------------------- |
+| cleanHtml() | Removes HTML tags      |
+| maskEmail() | Masks email characters |
+
+---
+
+# 4️⃣ Controller
+
+File:
+
+```
+app/Http/Controllers/ScrubberController.php
+```
+
+The controller handles:
+
+* Receiving user input
+* Processing multiple lines
+* Calling the service layer
+* Storing results in the database
+
+---
+
+# 5️⃣ Routes
+
+File:
+
+```
+routes/web.php
+```
+
+```php
+Route::get('/', [ScrubberController::class, 'index']);
+Route::post('/process', [ScrubberController::class, 'process']);
+```
+
+---
+
+# 🖥 Application Workflow
+
+1️⃣ User enters multiple lines of content.
+
+2️⃣ User selects processing type:
+
+* HTML Clean
+* Email Mask
+
+3️⃣ Controller sends the data to **ScrubberService**.
+
+4️⃣ Service processes each line.
+
+5️⃣ Results are saved in the **database**.
+
+6️⃣ Cleaned output is displayed on the page.
+
+---
+
+# 📊 Example
+
+### Input
+
+```
+<b>Hello World</b>
+useremail@gmail.com
+```
+
+### Output
+
+```
+Hello World
+u********@gmail.com
+```
+
+---
+
+# 🔥 Why Use a Service Layer?
+
+Benefits of using a **Service Class**:
+
+* Cleaner Controllers
+* Reusable Business Logic
+* Easier Testing
+* Better Code Organization
+
+Instead of writing logic inside controllers, it is placed inside **ScrubberService**.
+
+---
+
+# 🚀 Future Improvements
+
+Possible features to add:
+
+* Export cleaned data to CSV
+* Add API endpoints
+* Support phone number masking
+* Add validation rules
+* Pagination for history records
+* Admin dashboard
+
+---
+
+# 👨‍💻 Author
+
+Developed with ❤️ by **Manav Sanchela**
+
+#output
+<img width="906" height="502" alt="image" src="https://github.com/user-attachments/assets/aff099bc-e67f-40a3-9246-fdba92a313f3" />
+
