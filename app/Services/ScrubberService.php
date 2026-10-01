@@ -4,29 +4,60 @@ namespace App\Services;
 
 class ScrubberService
 {
-    public function cleanHtml($data) {
+    /**
+     * Remove HTML tags from content.
+     */
+    public function cleanHtml(string $data): string
+    {
         return strip_tags($data);
     }
 
-    public function maskEmail($email) {
-        return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
+    /**
+     * Mask characters in an email address while preserving
+     * the first and last character of the local part.
+     */
+    public function maskEmail(string $email): string
+    {
+        return preg_replace('/(?<=.).(?=.*@)/u', '*', $email) ?? $email;
     }
 
-    public function removeSpecialChars($string) {
-        return preg_replace('/[^A-Za-z0-9 ]/', '', $string);
- 
-        }
-        public function bulkClean($lines, $type) {
-    $results = [];
-    foreach ($lines as $line) {
-        if (empty(trim($line))) continue;
-        
-        if ($type == 'html') {
-            $results[] = $this->cleanHtml($line);
-        } elseif ($type == 'email') {
-            $results[] = $this->maskEmail($line);
-        }
+    /**
+     * Remove special characters while keeping letters,
+     * numbers and spaces.
+     */
+    public function removeSpecialChars(string $string): string
+    {
+        return preg_replace('/[^A-Za-z0-9 ]/', '', $string) ?? $string;
     }
-    return $results;
-}
+
+    /**
+     * Process multiple lines using the selected scrub type.
+     */
+    public function bulkClean(array $lines, string $type): array
+    {
+        $results = [];
+
+        foreach ($lines as $line) {
+            if (empty(trim($line))) {
+                continue;
+            }
+
+            $results[] = $this->scrub($line, $type);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Process a single piece of content.
+     */
+    public function scrub(string $content, string $type): string
+    {
+        return match ($type) {
+            'html' => $this->cleanHtml($content),
+            'email' => $this->maskEmail($content),
+            'special' => $this->removeSpecialChars($content),
+            default => $content,
+        };
+    }
 }

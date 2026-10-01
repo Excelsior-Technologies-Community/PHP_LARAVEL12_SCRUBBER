@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('scrubbed_data', function (Blueprint $table) {
-        $table->id();
-        $table->string('original_content');
-        $table->string('cleaned_content');
-        $table->string('type'); // e.g., email, phone, html
-        $table->timestamps();
-    });
+            $table->id();
+            $table->text('original_content');
+            $table->text('cleaned_content');
+            $table->string('type');
+            $table->timestamps();
+
+            $table->index('type');
+            $table->index('created_at');
+        });
     }
 
     /**
