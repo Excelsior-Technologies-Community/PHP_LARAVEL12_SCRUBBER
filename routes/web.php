@@ -11,3 +11,13 @@ Route::post('/process', [ScrubberController::class, 'process'])
 
 Route::get('/export', [ScrubberController::class, 'export'])
     ->name('scrubber.export');
+
+Route::delete('/scrubber/{scrubbedData}', [
+    ScrubberController::class,
+    'destroy'
+])->name('scrubber.destroy');
+
+Route::delete('/scrubber-bulk-delete', [
+    ScrubberController::class,
+    'bulkDelete'
+])->name('scrubber.bulkDelete');
